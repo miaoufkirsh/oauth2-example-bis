@@ -2,7 +2,6 @@ require "bundler/setup"
 require "sqlite3"
 require "active_record"
 require "oauth2/provider"
-require "oauth2/router"
 require 'sinatra/base'
 require 'thin'
 require 'logger'
@@ -26,7 +25,6 @@ PERMISSIONS = {
 OAuth2::Provider.handle_passwords do |client, login, password|
   user = User.find_by_login(login)
   if user.password==password
-    puts "acces"
     user.grant_access!(client)
   else
     nil
@@ -54,10 +52,9 @@ class MyApp < Sinatra::Base
     @client.save ? erb(:show_client) : erb(:new_client)
   end
   
-  #for authorize
+  #for authorize and get token
   [:get, :post].each do |method|
   __send__ method, '/oauth/authorize' do
-    puts params
     @owner  = User.find_by_id(session[:user_id])
     @oauth2 = OAuth2::Provider.parse(@owner, request)
     
@@ -120,9 +117,7 @@ class MyApp < Sinatra::Base
   end
   
   get '/me' do
-    puts request.inspect
     token = OAuth2::Provider.access_token(nil, [], request)
-    puts token.inspect
     if token.valid?
       JSON.unparse('username' => token.owner.login)
     else

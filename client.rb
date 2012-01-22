@@ -32,9 +32,10 @@ class MyApp < Sinatra::Base
   end
   
   get '/me' do  
-      puts Token.inspect
+    if !Token.nil?
       response = Token.get('/me')
       response.body
+    end
   end
 
   run! if app_file == $0
