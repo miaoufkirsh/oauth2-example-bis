@@ -1,0 +1,24 @@
+<h3>Sign in</h3>
+
+<p>Who are you? We&rsquo;d ask for a password usually, but seeing as
+  it&rsquo;s <em>you</em>&hellip;</p>
+
+<form method="post" action="/login">
+  <% @oauth2.params.each do |key, value| %>
+    <input type="hidden" name="<%= key %>" value="<%= value %>">
+  <% end %>
+  
+  <fieldset>
+    <label for="username">Login</label>
+    <input type="text" name="login" id="login">
+  </fieldset>
+  
+  <fieldset>
+    <label for="username">Password</label>
+    <input type="password" name="password" id="password">
+  </fieldset>
+  
+  <fieldset>
+    <input type="submit" value="Sign in">
+  </fieldset>
+</form>
