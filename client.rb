@@ -27,7 +27,7 @@ class MyApp < Sinatra::Base
 
 
   get '/' do 
-    "<li><a href=#{client.auth_code.authorize_url(:redirect_uri =>  REDIRECT_URI)}> Authorize the client </a></li>
+    "<li><a href=#{client.auth_code.authorize_url({:redirect_uri =>  REDIRECT_URI, :scope => "read write"})}> Authorize the client </a></li>
      <li><a href=/me>visit my profile</a></li>"
   end
   

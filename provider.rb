@@ -14,17 +14,23 @@ ActiveRecord::Base.logger = Logger.new('test.log')
 class User < ActiveRecord::Base
   include OAuth2::Model::ResourceOwner
   include OAuth2::Model::ClientOwner
+  def authenticate?(pass)
+    return true if self.password==password
+    return false
+  end
 end
 
 #hash describes the permissions
 PERMISSIONS = {
-  'read_notes' => 'Read all your notes'
+  'read' => 'Read  access',
+  'write' => 'Write access',
+  'superman' => 'Time Travel'
 }
 
 # password credential method
 OAuth2::Provider.handle_passwords do |client, login, password|
   user = User.find_by_login(login)
-  if !user.nil? && user.password==password
+  if !user.nil? && user.authenticate?(password)
     user.grant_access!(client)
   else
     nil
@@ -117,7 +123,7 @@ class MyApp < Sinatra::Base
   end
   
   get '/me' do
-    token = OAuth2::Provider.access_token(nil, [], request)
+    token = OAuth2::Provider.access_token(nil, ['read'], request)
     headers token.response_headers
     status  token.response_status
     
@@ -125,6 +131,19 @@ class MyApp < Sinatra::Base
       JSON.unparse('username' => token.owner.login)
     else
       JSON.unparse('error' => 'Keep out!')
+    end
+  end
+
+  # with a bad scope
+  get '/timetravel' do
+    token = OAuth2::Provider.access_token(nil, ['timetravel'], request)
+    headers token.response_headers
+    status  token.response_status
+    
+    if token.valid?
+      JSON.unparse('great' => 'you are superman')
+    else
+      JSON.unparse('error' => 'Only superman can do this')
     end
   end
   
