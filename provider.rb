@@ -24,7 +24,7 @@ PERMISSIONS = {
 # password credential method
 OAuth2::Provider.handle_passwords do |client, login, password|
   user = User.find_by_login(login)
-  if user.password==password
+  if !user.nil? && user.password==password
     user.grant_access!(client)
   else
     nil
@@ -118,6 +118,9 @@ class MyApp < Sinatra::Base
   
   get '/me' do
     token = OAuth2::Provider.access_token(nil, [], request)
+    headers token.response_headers
+    status  token.response_status
+    
     if token.valid?
       JSON.unparse('username' => token.owner.login)
     else
