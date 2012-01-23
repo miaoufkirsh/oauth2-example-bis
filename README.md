@@ -49,5 +49,5 @@ SSL
      openssl req -x509 -nodes -days 365 -newkey rsa:1024 -out ssl.crt -keyout ssl.key
 
 ### Usage
-same as previous, but with sslprovider.rb, sslclient.rb and sslCLI_client.rb
-for curl, use -k to avoid certificate verification
+same as previous, but with sslprovider.rb, sslclient.rb and sslCLI_client.rb.
+For curl, use -k to avoid certificate verification
