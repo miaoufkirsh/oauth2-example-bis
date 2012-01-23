@@ -23,3 +23,11 @@ run client.rb
 ### Command line password flow
 edit CLI_client.rb with client_id and client_secret
 run CLI_client.rb
+
+SSL
+---------------------------------
+### generate a certificate
+     openssl req -x509 -nodes -days 365 -newkey rsa:1024 -out ssl.crt -keyout ssl.key
+
+### Usage
+same as previous, but with sslprovider.rb, sslclient.rb and sslCLI_client.rb

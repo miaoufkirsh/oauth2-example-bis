@@ -149,6 +149,9 @@ class MyApp < Sinatra::Base
   
 end
 
-  run! if app_file == $0
+  run! do |server|
+    server.ssl = true
+    server.ssl_options = { :private_key_file => "ssl.key", :cert_chain_file => "ssl.crt", :verify_peer => true }
+  end
 end
 
