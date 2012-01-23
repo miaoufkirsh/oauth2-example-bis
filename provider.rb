@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   include OAuth2::Model::ResourceOwner
   include OAuth2::Model::ClientOwner
   def authenticate?(pass)
-    return true if self.password==password
+    return true if self.password==pass
     return false
   end
 end
