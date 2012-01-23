@@ -92,7 +92,7 @@ class MyApp < Sinatra::Base
 
   post '/login' do
     @user = User.find_by_login(params[:login])
-    if @user.password==params[:password]
+    if @user.authenticate?(params[:password])
       @oauth2 = OAuth2::Provider.parse(@user, request)
       session[:user_id] = @user.id
       erb(@user ? :authorize : :login)
